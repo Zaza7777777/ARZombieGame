@@ -97,4 +97,9 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+<<<<<<< HEAD
 *.tgz
+=======
+
+*.tgz
+>>>>>>> 9968036535ea0135bd059f48ceceb436ca17317f
