@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcf7219bab7fe46a1ad266029b2fee19, type: 3}
+  m_Name: Readme
+  m_EditorClassIdentifier: 
+  icon: {fileID: 2800000, guid: 727a75301c3d24613a3ebcec4a24c2c8, type: 3}
+  title: AR using Vuforia
+  sections:
+  - heading: Vuforia
+    text: Vurforia provides AR functionality across several platforms, including
+      Unity.
+    linkText: Home Page
+    url: https://developer.vuforia.com/home
+  - heading: Documentation
+    text: Documentation on how to use the different features of Vuforia can be found
+      here, including image targets, plane tracking, model tracking, and more.
+    linkText: Getting started in Unity
+    url: https://developer.vuforia.com/library/vuforia-engine/getting-started/development-environments/getting-started-vuforia-engine-unity/
+  - heading: Installation
+    text: The package can be downloaded directly from the Vuforia site and added
+      to a project, or it can be found on the Asset Store and linked that way.
+    linkText: 
+    url: 
+  loadedLayout: 0
