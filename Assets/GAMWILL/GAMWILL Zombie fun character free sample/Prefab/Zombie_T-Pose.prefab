@@ -559,6 +559,7 @@ GameObject:
   - component: {fileID: 2418107499619691853}
   - component: {fileID: -1621898412854493186}
   - component: {fileID: 3934251479275192715}
+  - component: {fileID: 3411618909949048947}
   m_Layer: 0
   m_Name: Zombie_T-Pose
   m_TagString: Untagged
@@ -623,6 +624,10 @@ MonoBehaviour:
   SpawnDelay: 0.1
   Lifetime: 30
   Health: 5
+  isDead: 0
+  growlClip: {fileID: 8300000, guid: e867d8f971e6f5d4691e7f09786170a8, type: 3}
+  hitClip: {fileID: 8300000, guid: 801fd1c0841356544903ad850cfa1f42, type: 3}
+  deathClip: {fileID: 8300000, guid: 1c6da6c789234cc4eb7507b0dce688ce, type: 3}
 --- !u!136 &3934251479275192715
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -646,6 +651,22 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3411618909949048947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3265037317432396975}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18169f4c051e834cb5634b591fc003c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GrabDistance: 0.5
+  LaunchForce: 6
+  SlamSpeed: 3
+  isGrabbing: 0
 --- !u!1 &3318814381510319632
 GameObject:
   m_ObjectHideFlags: 0

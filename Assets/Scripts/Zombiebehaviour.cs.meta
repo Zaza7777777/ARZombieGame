@@ -1,2 +1,14 @@
 fileFormatVersion: 2
 guid: 7ebf754ded0b45044b9e124302284c5b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - growlClip: {fileID: 8300000, guid: e867d8f971e6f5d4691e7f09786170a8, type: 3}
+  - hitClip: {fileID: 8300000, guid: 801fd1c0841356544903ad850cfa1f42, type: 3}
+  - deathClip: {fileID: 8300000, guid: 1c6da6c789234cc4eb7507b0dce688ce, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
