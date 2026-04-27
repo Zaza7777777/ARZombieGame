@@ -39,7 +39,7 @@ public class JumpScareManager : MonoBehaviour
     void Awake() { Instance = this; }
     void Start() { ScheduleNextJumpScare(); }
 
-    // ─── Call from your health system whenever damage is taken ───
+
     public void SetHealth(float health)
     {
         currentHealth = Mathf.Clamp(health, 0f, maxHealth);
@@ -56,7 +56,7 @@ public class JumpScareManager : MonoBehaviour
     {
         if (GameManager.Instance.IsGameOver()) return;
 
-        // Random chance to skip and silently reschedule
+
         if (Random.value < skipChance)
         {
             ScheduleNextJumpScare();
@@ -69,7 +69,7 @@ public class JumpScareManager : MonoBehaviour
 
         zombieFaceImage.SetActive(true);
 
-        // Play audio — will be cut off on dismiss
+
         if (jumpScareAudio != null)
         {
             jumpScareAudio.Stop();
@@ -87,7 +87,7 @@ public class JumpScareManager : MonoBehaviour
     {
         if (!isActive) return;
 
-        // ── Auto-dismiss after split second ──
+
         if (!requireShakeToDismiss)
         {
             activeTimer += Time.deltaTime;
@@ -96,7 +96,7 @@ public class JumpScareManager : MonoBehaviour
             return;
         }
 
-        // ── Shake to dismiss ──
+
         shakeCooldown -= Time.deltaTime;
         Vector3 accel = Input.acceleration;
         Vector3 delta = accel - lastAccel;
@@ -119,7 +119,7 @@ public class JumpScareManager : MonoBehaviour
     {
         isActive = false;
 
-        // Cut audio immediately when face disappears
+
         if (jumpScareAudio != null)
             jumpScareAudio.Stop();
 
@@ -134,7 +134,7 @@ public class JumpScareManager : MonoBehaviour
         ScheduleNextJumpScare();
     }
 
-    // ─── Call on game over ───
+
     public void StopAllScares()
     {
         CancelInvoke("TriggerJumpScare");

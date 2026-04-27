@@ -15,11 +15,11 @@ public class Shooter : MonoBehaviour
     public Color shootingColor = Color.red;
     public Color healColor = Color.green;
     public Color nukeColor = new Color(1f, 0.5f, 0f);
-    public Color golemColor = new Color(0.5f, 0f, 1f);  // purple for golems
+    public Color golemColor = new Color(0.5f, 0f, 1f);  
 
     private float gazeTimer = 0f;
     private ZombieBehaviour currentTarget = null;
-    private GolemBehaviour currentGolem = null;          // NEW
+    private GolemBehaviour currentGolem = null;          
     private HealthPickup currentMedKit = null;
     private NukeBehaviour currentNuke = null;
     private WeaponRecoil weaponRecoil;
@@ -44,7 +44,7 @@ public class Shooter : MonoBehaviour
         if (Physics.Raycast(ray, out hit, ShootRange))
         {
             ZombieBehaviour zombie = hit.collider.GetComponentInParent<ZombieBehaviour>();
-            GolemBehaviour golem = hit.collider.GetComponentInParent<GolemBehaviour>(); // NEW
+            GolemBehaviour golem = hit.collider.GetComponentInParent<GolemBehaviour>(); 
             HealthPickup medKit = hit.collider.GetComponentInParent<HealthPickup>();
             NukeBehaviour nuke = hit.collider.GetComponentInParent<NukeBehaviour>();
 
@@ -74,7 +74,7 @@ public class Shooter : MonoBehaviour
                     gazeTimer = 0f;
                 }
             }
-            else if (golem != null)                      // NEW BLOCK
+            else if (golem != null)                    
             {
                 currentTarget = null;
                 currentMedKit = null;

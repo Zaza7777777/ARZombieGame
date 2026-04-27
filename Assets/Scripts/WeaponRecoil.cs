@@ -21,7 +21,7 @@ public class WeaponRecoil : MonoBehaviour
 
     IEnumerator RecoilCoroutine()
     {
-        // Kick back
+        
         Vector3 recoilPos = originalPosition + new Vector3(0, 0.02f, -recoilAmount);
         float t = 0;
         while (t < 1f)
@@ -31,7 +31,7 @@ public class WeaponRecoil : MonoBehaviour
             yield return null;
         }
 
-        // Return to original
+        
         t = 0;
         while (t < 1f)
         {

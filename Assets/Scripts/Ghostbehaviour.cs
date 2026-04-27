@@ -19,7 +19,7 @@ public class GhostBehaviour : MonoBehaviour
         arCamera = Camera.main.transform;
         rb = GetComponent<Rigidbody>();
         rb.useGravity = false;
-        rb.isKinematic = true; // kinematic + MovePosition = physics collisions without gravity issues
+        rb.isKinematic = true; 
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         rb.constraints = RigidbodyConstraints.FreezePositionY
                        | RigidbodyConstraints.FreezeRotationX
@@ -47,7 +47,7 @@ public class GhostBehaviour : MonoBehaviour
 
         if (cooldownTimer > 0) cooldownTimer -= Time.fixedDeltaTime;
 
-        // Move using MovePosition - respects colliders when isKinematic = true
+   
         Vector3 direction = arCamera.position - transform.position;
         direction.y = 0;
 
@@ -57,7 +57,6 @@ public class GhostBehaviour : MonoBehaviour
             rb.MovePosition(newPosition);
         }
 
-        // Catch check
         if (Vector3.Distance(transform.position, arCamera.position) < CatchDistance && cooldownTimer <= 0)
         {
             CatchPlayer();

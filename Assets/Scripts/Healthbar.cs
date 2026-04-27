@@ -12,11 +12,9 @@ public class HealthBar : MonoBehaviour
     {
         if (GameManager.Instance == null) return;
 
-        // Update slider value based on lives
         float healthPercent = (float)GameManager.Instance.Lives / GameManager.Instance.MaxLives;
         healthSlider.value = healthPercent;
 
-        // Change color based on health
         fillImage.color = Color.Lerp(lowHealth, fullHealth, healthPercent);
     }
 }

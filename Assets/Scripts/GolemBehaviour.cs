@@ -3,13 +3,13 @@ using System.Collections;
 
 public class GolemBehaviour : MonoBehaviour
 {
-    public float MoveSpeed = 0.025f;       // slower than zombie
+    public float MoveSpeed = 0.025f;       
     public float CatchDistance = 0.05f;
     public float CatchCooldown = 3.0f;
     public float SpawnDelay = 3f;
     public float Lifetime = 45f;
-    public int Health = 15;                // much tankier than zombie
-    public int LivesDamage = 2;            // deals 2 lives of damage on catch
+    public int Health = 15;              
+    public int LivesDamage = 2;          
     public bool isDead = false;
 
     [Header("Audio")]
@@ -66,7 +66,7 @@ public class GolemBehaviour : MonoBehaviour
         if (direction.sqrMagnitude > 0.001f)
         {
             transform.position += direction.normalized * MoveSpeed * Time.deltaTime;
-            // Golems turn slower — feels more lumbering
+
             Quaternion targetRot = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 2f);
         }
@@ -115,7 +115,7 @@ public class GolemBehaviour : MonoBehaviour
         if (deathClip != null)
             AudioSource.PlayClipAtPoint(deathClip, transform.position);
 
-        // GolemKilled gives more score than ZombieKilled
+   
         GameManager.Instance.GolemKilled();
         Debug.Log("Golem killed!");
         Destroy(gameObject);
@@ -123,7 +123,7 @@ public class GolemBehaviour : MonoBehaviour
 
     void CatchPlayer()
     {
-        // Golems deal LivesDamage lives at once
+  
         for (int i = 0; i < LivesDamage; i++)
             GameManager.Instance.LoseLife();
 

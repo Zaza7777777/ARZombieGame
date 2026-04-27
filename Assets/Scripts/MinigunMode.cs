@@ -36,7 +36,7 @@ public class MinigunMode : MonoBehaviour
         if (GameManager.Instance == null) return;
         if (GameManager.Instance.IsGameOver()) return;
 
-        // Check kills and activate minigun
+       
         if (!minigunActive &&
             GameManager.Instance.GetKillCount() >= killsRequired)
         {
@@ -45,7 +45,7 @@ public class MinigunMode : MonoBehaviour
 
         if (minigunActive)
         {
-            // Count down timer
+          
             minigunTimer -= Time.deltaTime;
             if (minigunTimer <= 0f)
             {
@@ -53,7 +53,7 @@ public class MinigunMode : MonoBehaviour
                 return;
             }
 
-            // Auto shoot spread
+        
             shootTimer += Time.deltaTime;
             if (shootTimer >= shootInterval)
             {
@@ -109,7 +109,7 @@ public class MinigunMode : MonoBehaviour
         if (revolver != null) revolver.SetActive(true);
         if (minigun != null) minigun.SetActive(false);
 
-        // Reset so player earns it again
+        
         GameManager.Instance.ResetKillCount();
 
         Debug.Log("Minigun DEACTIVATED! Kill 10 more to earn it again");

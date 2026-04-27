@@ -48,14 +48,14 @@ public class HealthPickup : MonoBehaviour
     {
         collected = true;
 
-        // Popup text
+
         if (healPopupPrefab != null)
         {
             Vector3 popupPos = transform.position + Vector3.up * 0.3f;
             Instantiate(healPopupPrefab, popupPos, Quaternion.identity);
         }
 
-        // Sound
+
         if (pickupSound != null)
             AudioSource.PlayClipAtPoint(pickupSound, transform.position);
 

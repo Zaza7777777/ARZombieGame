@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
         WaveInProgress = true;
     }
 
-    // Called by both ZombieBehaviour and GolemBehaviour on death
+
     public void ZombieKilled()
     {
         if (gameOver) return;
@@ -89,11 +89,11 @@ public class GameManager : MonoBehaviour
         if (ZombiesRemainingInWave <= 0) WaveComplete();
     }
 
-    // Golem kill is worth more points — call this from GolemBehaviour.Die() instead
+
     public void GolemKilled()
     {
         if (gameOver) return;
-        Score += 25 * CurrentWave;   // golems worth more
+        Score += 25 * CurrentWave;   
         ZombiesRemainingInWave--;
 
         killCount++;
@@ -107,12 +107,12 @@ public class GameManager : MonoBehaviour
     {
         if (gameOver) return;
 
-        // Kill regular zombies
+
         ZombieBehaviour[] zombies = FindObjectsOfType<ZombieBehaviour>();
         foreach (ZombieBehaviour z in zombies)
             z.KillInstantly();
 
-        // Kill golems
+
         GolemBehaviour[] golems = FindObjectsOfType<GolemBehaviour>();
         foreach (GolemBehaviour g in golems)
             g.KillInstantly();

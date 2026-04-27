@@ -9,11 +9,9 @@ public class AlwaysSpawner : MonoBehaviour
 
     void Start()
     {
-        // Initialize the timer so it doesn't spawn on the very first frame
+      
         Timer = SpawnPeriod;
 
-        // Safety Check: If this script is accidentally attached to the prefab, 
-        // disable it so it doesn't create an infinite loop.
         if (gameObject.name.Contains("(Clone)"))
         {
             this.enabled = false;
@@ -22,7 +20,7 @@ public class AlwaysSpawner : MonoBehaviour
 
     void Update()
     {
-        // Don't run the timer if the game is over
+
         if (GameManager.Instance != null && GameManager.Instance.IsGameOver()) return;
 
         Timer -= Time.deltaTime;
@@ -42,7 +40,6 @@ public class AlwaysSpawner : MonoBehaviour
             return;
         }
 
-        // Create the object at the designated spawn point
         Instantiate(SpawnObject, SpawnPoint.position, SpawnPoint.rotation);
     }
 }

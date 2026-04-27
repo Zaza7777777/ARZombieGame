@@ -15,7 +15,7 @@ public class NukeBehaviour : MonoBehaviour
     [Header("Feedback")]
     public GameObject explosionEffectPrefab;
     public AudioClip activateSound;
-    public TMP_Text countdownLabel; // optional: world-space TMP on the nuke object
+    public TMP_Text countdownLabel; 
 
     private float gazeTimer = 0f;
     private float expireTimer = 0f;
@@ -25,20 +25,20 @@ public class NukeBehaviour : MonoBehaviour
     {
         if (activated) return;
 
-        // Rotate like medkit
+        
         transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime);
 
-        // Countdown to expiry
+        
         expireTimer += Time.deltaTime;
 
-        // Update the countdown label if assigned
+        
         if (countdownLabel != null)
         {
             float remaining = Mathf.Max(0f, timeBeforeExpire - expireTimer);
             countdownLabel.text = Mathf.CeilToInt(remaining) + "s";
         }
 
-        // Nuke expires and disappears
+       
         if (expireTimer >= timeBeforeExpire)
         {
             Debug.Log("Nuke expired!");
@@ -46,7 +46,7 @@ public class NukeBehaviour : MonoBehaviour
             return;
         }
 
-        // Gaze detection — same as HealthPickup
+        
         Ray ray = Camera.main.ScreenPointToRay(
             new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
@@ -74,15 +74,15 @@ public class NukeBehaviour : MonoBehaviour
     {
         activated = true;
 
-        // Explosion effect
+        
         if (explosionEffectPrefab != null)
             Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
 
-        // Sound
+        
         if (activateSound != null)
             AudioSource.PlayClipAtPoint(activateSound, transform.position);
 
-        // Kill all zombies + cost 1 life
+        
         GameManager.Instance.KillAllZombies();
         GameManager.Instance.LoseLife();
 

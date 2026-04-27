@@ -8,8 +8,8 @@ public class WaveSpawner : MonoBehaviour
 
     [Header("Spawn Settings")]
     public float SpawnInterval = 2f;
-    public float SpawnDistance = 3f;         // 3 metres away in AR (was 1f — too close)
-    public float SpawnYOffset = -0.1f;       // below camera height = ground level
+    public float SpawnDistance = 3f;         
+    public float SpawnYOffset = -0.1f;       
     [Range(0f, 1f)]
     public float GolemSpawnChance = 0.25f;
 
@@ -58,7 +58,7 @@ public class WaveSpawner : MonoBehaviour
         );
 
         Vector3 pos = arCamera.transform.position + offset;
-        pos.y = arCamera.transform.position.y + SpawnYOffset;  // ground level
+        pos.y = arCamera.transform.position.y + SpawnYOffset;  
 
         bool spawnGolem = GolemObject != null && Random.value < GolemSpawnChance;
         GameObject prefab = spawnGolem ? GolemObject : ZombieObject;
