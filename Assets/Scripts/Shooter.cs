@@ -7,17 +7,21 @@ public class Shooter : MonoBehaviour
     public float GazeTimeRequired = 0.8f;
     public Camera arCamera;
     public Image ReticleFill;
-    public Image ReticleBase;       // add this — the background ring
+    public Image ReticleBase;
     public GameObject revolver;
 
     [Header("Reticle Colors")]
     public Color idleColor = Color.white;
     public Color shootingColor = Color.red;
     public Color healColor = Color.green;
+    public Color nukeColor = new Color(1f, 0.5f, 0f);
+    public Color golemColor = new Color(0.5f, 0f, 1f);  // purple for golems
 
     private float gazeTimer = 0f;
     private ZombieBehaviour currentTarget = null;
+    private GolemBehaviour currentGolem = null;          // NEW
     private HealthPickup currentMedKit = null;
+    private NukeBehaviour currentNuke = null;
     private WeaponRecoil weaponRecoil;
 
     void Start()
@@ -39,17 +43,16 @@ public class Shooter : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, ShootRange))
         {
-            // Check for zombie first
-            ZombieBehaviour zombie = hit.collider.gameObject
-                .GetComponentInParent<ZombieBehaviour>();
-
-            // Check for med kit
-            HealthPickup medKit = hit.collider.gameObject
-                .GetComponent<HealthPickup>();
+            ZombieBehaviour zombie = hit.collider.GetComponentInParent<ZombieBehaviour>();
+            GolemBehaviour golem = hit.collider.GetComponentInParent<GolemBehaviour>(); // NEW
+            HealthPickup medKit = hit.collider.GetComponentInParent<HealthPickup>();
+            NukeBehaviour nuke = hit.collider.GetComponentInParent<NukeBehaviour>();
 
             if (zombie != null)
             {
+                currentGolem = null;
                 currentMedKit = null;
+                currentNuke = null;
                 SetReticleColor(shootingColor);
 
                 if (zombie == currentTarget)
@@ -62,8 +65,7 @@ public class Shooter : MonoBehaviour
                     {
                         zombie.TakeHit();
                         gazeTimer = 0f;
-                        if (weaponRecoil != null)
-                            weaponRecoil.PlayRecoil();
+                        if (weaponRecoil != null) weaponRecoil.PlayRecoil();
                     }
                 }
                 else
@@ -72,16 +74,53 @@ public class Shooter : MonoBehaviour
                     gazeTimer = 0f;
                 }
             }
+            else if (golem != null)                      // NEW BLOCK
+            {
+                currentTarget = null;
+                currentMedKit = null;
+                currentNuke = null;
+                SetReticleColor(golemColor);
+
+                if (golem == currentGolem)
+                {
+                    gazeTimer += Time.deltaTime;
+                    if (ReticleFill != null)
+                        ReticleFill.fillAmount = gazeTimer / GazeTimeRequired;
+
+                    if (gazeTimer >= GazeTimeRequired)
+                    {
+                        golem.TakeHit();
+                        gazeTimer = 0f;
+                        if (weaponRecoil != null) weaponRecoil.PlayRecoil();
+                    }
+                }
+                else
+                {
+                    currentGolem = golem;
+                    gazeTimer = 0f;
+                }
+            }
             else if (medKit != null)
             {
-                // Looking at med kit
                 currentTarget = null;
+                currentGolem = null;
+                currentNuke = null;
                 currentMedKit = medKit;
                 SetReticleColor(healColor);
-
                 gazeTimer += Time.deltaTime;
                 if (ReticleFill != null)
                     ReticleFill.fillAmount = gazeTimer / medKit.gazeTimeRequired;
+            }
+            else if (nuke != null)
+            {
+                currentTarget = null;
+                currentGolem = null;
+                currentMedKit = null;
+                currentNuke = nuke;
+                SetReticleColor(nukeColor);
+                gazeTimer += Time.deltaTime;
+                if (ReticleFill != null)
+                    ReticleFill.fillAmount = gazeTimer / nuke.gazeTimeRequired;
             }
             else
             {
@@ -103,7 +142,9 @@ public class Shooter : MonoBehaviour
     void ResetGaze()
     {
         currentTarget = null;
+        currentGolem = null;
         currentMedKit = null;
+        currentNuke = null;
         gazeTimer = 0f;
         if (ReticleFill != null)
         {

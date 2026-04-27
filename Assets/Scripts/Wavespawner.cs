@@ -2,9 +2,16 @@ using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
+    [Header("Enemy Prefabs")]
     public GameObject ZombieObject;
+    public GameObject GolemObject;
+
+    [Header("Spawn Settings")]
     public float SpawnInterval = 2f;
-    public float SpawnDistance = 0.5f; // how far in front of camera zombies spawn
+    public float SpawnDistance = 3f;         // 3 metres away in AR (was 1f — too close)
+    public float SpawnYOffset = -0.1f;       // below camera height = ground level
+    [Range(0f, 1f)]
+    public float GolemSpawnChance = 0.25f;
 
     private float timer = 0f;
     private int spawnedThisWave = 0;
@@ -23,42 +30,54 @@ public class WaveSpawner : MonoBehaviour
         if (GameManager.Instance.IsGameOver()) return;
         if (!GameManager.Instance.WaveInProgress) return;
 
-        // Reset spawner for new wave
         if (GameManager.Instance.CurrentWave != lastWave)
         {
             spawnedThisWave = 0;
             lastWave = GameManager.Instance.CurrentWave;
         }
 
-        int totalThisWave = GameManager.Instance.ZombiesPerWave + (GameManager.Instance.CurrentWave - 1) * 2;
+        int totalThisWave = GameManager.Instance.ZombiesPerWave
+                          + (GameManager.Instance.CurrentWave - 1) * 2;
         if (spawnedThisWave >= totalThisWave) return;
 
         timer -= Time.deltaTime;
         if (timer > 0) return;
 
-        // Spawn at random angle around the player at a fixed distance
-        float randomAngle = Random.Range(0f, 360f);
-        Vector3 offset = new Vector3(
-            Mathf.Sin(randomAngle * Mathf.Deg2Rad) * SpawnDistance,
-            0,
-            Mathf.Cos(randomAngle * Mathf.Deg2Rad) * SpawnDistance
-        );
-
-        // Spawn at camera height so zombie is visible
-        Vector3 spawnPosition = arCamera.transform.position + offset;
-        spawnPosition.y = arCamera.transform.position.y - 0.1f;
-
-        GameObject zombie = Instantiate(ZombieObject, spawnPosition, Quaternion.identity);
-
-        // Scale speed with wave number
-        ZombieBehaviour zb = zombie.GetComponent<ZombieBehaviour>();
-        if (zb != null)
-        {
-            zb.MoveSpeed = 0.03f + (GameManager.Instance.CurrentWave - 1) * 0.01f;
-        }
-
+        SpawnEnemy();
         spawnedThisWave++;
         timer = SpawnInterval;
-        Debug.Log("Spawned zombie " + spawnedThisWave + " at " + spawnPosition);
+    }
+
+    void SpawnEnemy()
+    {
+        float angle = Random.Range(0f, 360f);
+        Vector3 offset = new Vector3(
+            Mathf.Sin(angle * Mathf.Deg2Rad) * SpawnDistance,
+            0,
+            Mathf.Cos(angle * Mathf.Deg2Rad) * SpawnDistance
+        );
+
+        Vector3 pos = arCamera.transform.position + offset;
+        pos.y = arCamera.transform.position.y + SpawnYOffset;  // ground level
+
+        bool spawnGolem = GolemObject != null && Random.value < GolemSpawnChance;
+        GameObject prefab = spawnGolem ? GolemObject : ZombieObject;
+
+        GameObject enemy = Instantiate(prefab, pos, Quaternion.identity);
+
+        float speedBoost = (GameManager.Instance.CurrentWave - 1) * 0.01f;
+
+        if (spawnGolem)
+        {
+            GolemBehaviour gb = enemy.GetComponent<GolemBehaviour>();
+            if (gb != null) gb.MoveSpeed = 0.02f + speedBoost;
+        }
+        else
+        {
+            ZombieBehaviour zb = enemy.GetComponent<ZombieBehaviour>();
+            if (zb != null) zb.MoveSpeed = 0.03f + speedBoost;
+        }
+
+        Debug.Log($"Spawned {(spawnGolem ? "Golem" : "Zombie")} #{spawnedThisWave} at {pos}");
     }
 }

@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public TMP_Text ScoreText;
     public TMP_Text LivesText;
     public TMP_Text WaveText;
-    public TMP_Text KillCountText;          // <-- ADD THIS
+    public TMP_Text KillCountText;
     public GameObject GameOverPanel;
     public GameObject WaveCompletePanel;
     public GameObject WaveStartPanel;
@@ -28,9 +28,8 @@ public class GameManager : MonoBehaviour
     private AudioSource audioSource;
     private bool gameOver = false;
 
-    // Kill count for minigun unlock
     private int killCount = 0;
-    private MinigunMode minigunMode;         // <-- ADD THIS
+    private MinigunMode minigunMode;
 
     void Awake() { Instance = this; }
 
@@ -40,7 +39,7 @@ public class GameManager : MonoBehaviour
         audioSource.spatialBlend = 0f;
         audioSource.playOnAwake = false;
 
-        minigunMode = FindObjectOfType<MinigunMode>();  // <-- ADD THIS
+        minigunMode = FindObjectOfType<MinigunMode>();
 
         if (GameOverPanel != null) GameOverPanel.SetActive(false);
         if (WaveCompletePanel != null) WaveCompletePanel.SetActive(false);
@@ -66,7 +65,7 @@ public class GameManager : MonoBehaviour
         {
             WaveInProgress = true;
         }
-        Debug.LogWarning("Wave " + CurrentWave + " started! Zombies: " + ZombiesRemainingInWave);
+        Debug.LogWarning("Wave " + CurrentWave + " started! Enemies: " + ZombiesRemainingInWave);
         UpdateUI();
     }
 
@@ -76,6 +75,7 @@ public class GameManager : MonoBehaviour
         WaveInProgress = true;
     }
 
+    // Called by both ZombieBehaviour and GolemBehaviour on death
     public void ZombieKilled()
     {
         if (gameOver) return;
@@ -87,6 +87,37 @@ public class GameManager : MonoBehaviour
 
         UpdateUI();
         if (ZombiesRemainingInWave <= 0) WaveComplete();
+    }
+
+    // Golem kill is worth more points — call this from GolemBehaviour.Die() instead
+    public void GolemKilled()
+    {
+        if (gameOver) return;
+        Score += 25 * CurrentWave;   // golems worth more
+        ZombiesRemainingInWave--;
+
+        killCount++;
+        Debug.Log("Golem kill! Kill count: " + killCount);
+
+        UpdateUI();
+        if (ZombiesRemainingInWave <= 0) WaveComplete();
+    }
+
+    public void KillAllZombies()
+    {
+        if (gameOver) return;
+
+        // Kill regular zombies
+        ZombieBehaviour[] zombies = FindObjectsOfType<ZombieBehaviour>();
+        foreach (ZombieBehaviour z in zombies)
+            z.KillInstantly();
+
+        // Kill golems
+        GolemBehaviour[] golems = FindObjectsOfType<GolemBehaviour>();
+        foreach (GolemBehaviour g in golems)
+            g.KillInstantly();
+
+        Debug.Log($"NUKE — killed {zombies.Length} zombies and {golems.Length} golems!");
     }
 
     void WaveComplete()
@@ -136,7 +167,7 @@ public class GameManager : MonoBehaviour
     public void ResetKillCount()
     {
         killCount = 0;
-        UpdateUI();                          // <-- ADD THIS so counter resets on screen
+        UpdateUI();
     }
 
     void UpdateUI()
@@ -145,13 +176,12 @@ public class GameManager : MonoBehaviour
         if (LivesText != null) LivesText.text = "Lives: " + Lives;
         if (WaveText != null) WaveText.text = "Wave: " + CurrentWave;
 
-        // Kill counter with minigun goal                // <-- ADD THIS BLOCK
         if (KillCountText != null)
         {
             if (minigunMode != null)
-                KillCountText.text = "Kills: " + killCount + " / " + minigunMode.killsRequired;
+                KillCountText.text = "Minigun: " + killCount + " / " + minigunMode.killsRequired;
             else
-                KillCountText.text = "Kills: " + killCount;
+                KillCountText.text = "Minigun: " + killCount;
         }
     }
 

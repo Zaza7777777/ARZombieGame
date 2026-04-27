@@ -12,9 +12,9 @@ public class ZombieBehaviour : MonoBehaviour
     public bool isDead = false;
 
     [Header("Audio")]
-    public AudioClip growlClip;    // plays on spawn then every ~15 seconds
-    public AudioClip hitClip;      // when it takes a hit
-    public AudioClip deathClip;    // when it dies
+    public AudioClip growlClip;
+    public AudioClip hitClip;
+    public AudioClip deathClip;
 
     private AudioSource audioSource;
     private Transform arCamera;
@@ -27,14 +27,12 @@ public class ZombieBehaviour : MonoBehaviour
         Destroy(gameObject, Lifetime);
         spawnTimer = SpawnDelay;
 
-        // Setup audio
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.loop = false;
-        audioSource.spatialBlend = 1f;  // 3D — louder as zombie gets closer
+        audioSource.spatialBlend = 1f;
         audioSource.maxDistance = 10f;
         audioSource.playOnAwake = false;
 
-        // Play growl immediately on spawn
         if (growlClip != null)
             audioSource.PlayOneShot(growlClip);
 
@@ -45,7 +43,6 @@ public class ZombieBehaviour : MonoBehaviour
     {
         while (!isDead)
         {
-            // Slight randomness so multiple zombies don't sync up
             yield return new WaitForSeconds(Random.Range(12f, 18f));
             if (!isDead && growlClip != null)
                 audioSource.PlayOneShot(growlClip);
@@ -92,12 +89,18 @@ public class ZombieBehaviour : MonoBehaviour
         if (isDead) return;
         Health--;
 
-        // Play hit sound
         if (hitClip != null)
             audioSource.PlayOneShot(hitClip);
 
         StartCoroutine(FlashRed());
         if (Health <= 0) Die();
+    }
+
+    public void KillInstantly()
+    {
+        if (isDead) return;
+        Health = 0;
+        Die();
     }
 
     IEnumerator FlashRed()
@@ -123,7 +126,6 @@ public class ZombieBehaviour : MonoBehaviour
     {
         isDead = true;
 
-        // Stop any audio and play death sound at zombie's position
         audioSource.Stop();
         if (deathClip != null)
             AudioSource.PlayClipAtPoint(deathClip, transform.position);
